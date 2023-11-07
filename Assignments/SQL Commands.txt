@@ -1,0 +1,29 @@
+CREATE SCHEMA CW1
+
+
+
+
+CREATE TABLE CW1.[User] (
+    user_id INTEGER PRIMARY KEY IDENTITY(1,1),
+    first_name VARCHAR(40),
+    surname VARCHAR(40),
+    location VARCHAR(40),
+    about_me VARCHAR(500),
+    email VARCHAR(80),
+    units VARCHAR(10) CHECK (units IN ('imperial', 'metric')),
+    activity_time_preference VARCHAR(15),
+    weight FLOAT,
+    height FLOAT,
+    birthday DATE,
+    language VARCHAR(30),
+    password VARCHAR(40),
+    account_type VARCHAR(15),
+    is_archive BIT
+);
+
+
+
+CREATE TABLE CW1.[Follow_List] (
+	follow_id INTEGER,
+	user_id INTEGER
+);
