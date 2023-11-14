@@ -23,7 +23,47 @@ CREATE TABLE CW1.[User] (
 
 
 
-CREATE TABLE CW1.[Follow_List] (
-	follow_id INTEGER,
-	user_id INTEGER
+CREATE TABLE CW1.[Favourite_Activities] (
+	FOREIGN KEY (activity_id) REFERENCES CW1.Activity(activity_id),
+	FOREIGN KEY (user_id) REFERENCES CW1.User(user_id)
 );
+
+
+
+CREATE TABLE CW1.[Activity] (
+	activity_id INTEGER PRIMARY KEY IDENTITY(1,1),
+	activity_type VARCHAR(30)
+);
+
+
+CREATE TABLE CW1.[Follow_List] (
+	FOREIGN KEY (user_id) REFERENCES CW1.User(user_id),
+	follow_id INTEGER
+
+
+
+
+
+
+ALTER TABLE CW1.[Archived_User]
+ADD CONSTRAINT user_id FOREIGN KEY([user_id]) 
+    REFERENCES CW1.[User]([user_id])
+
+
+
+INSERT INTO [User] (
+	[user_id],
+	[firstname],
+	[secondname],
+	[email],
+	[password]
+)
+VALUES
+	(1, 'Grace', 'Hopper', 'grace@plymouth.ac.uk', 'ISAD123!'),
+	(2, 'Tim', 'Berners-Lee', 'tim@plymouth.ac.uk', 'COMP2001!'),
+	(3, 'Ada', 'Lovelace', 'ada@plymouth.ac.uk', 'insecurePassword');
+
+
+
+
+
