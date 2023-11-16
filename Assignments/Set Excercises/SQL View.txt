@@ -1,0 +1,33 @@
+SQL View
+
+
+CREATE VIEW CW1.[Main_View] AS
+SELECT u.username AS "Username", u.email AS "Email", u.account_type AS "Account Type",
+(SELECT COUNT(*) FROM CW1.[Follow_List] f WHERE u.user_id = f.user_id) Following,
+(SELECT COUNT(*) FROM CW1.[Follow_List] f WHERE u.user_id = f.follow_id) Followers,
+STRING_AGG(a.activity_type,', ') AS "Favourite Activities"
+FROM CW1.[User] u
+FULL OUTER JOIN CW1.[Favourite_Activities] f ON u.user_id = f.user_id
+FULL OUTER JOIN CW1.[Activity] a ON f.activity_id = a.activity_id
+GROUP BY u.user_id, u.account_type, u.username, u.email
+
+SELECT * FROM CW1.[Main_View]
+
+
+
+CREATE VIEW CW1.[Archive_View] AS
+SELECT u.username AS "Archive Username", u.email AS "Archive Email", u.account_type AS "Archive Account Type",
+(SELECT COUNT(*) FROM CW1.[Archive_Follow_List] f WHERE u.user_id = f.user_id) Following,
+(SELECT COUNT(*) FROM CW1.[Archive_Follow_List] f WHERE u.user_id = f.follow_id) Followers,
+STRING_AGG(a.activity_type,', ') AS "Favourite Activities"
+FROM CW1.[Archive_User] u
+FULL OUTER JOIN CW1.[Archive_Favourite_Activities] f ON u.user_id = f.user_id
+FULL OUTER JOIN CW1.[Activity] a ON f.activity_id = a.activity_id
+GROUP BY u.user_id, u.account_type, u.username, u.email
+
+SELECT * FROM CW1.[Archive_View]
+
+
+
+
+

@@ -2,6 +2,30 @@ Inserting Data
 
 INSERT INTO CW1.[User] ([username],[email],[password],[account_type])
 VALUES
-	('Grace Hopper', 'grace@plymouth.ac.uk', 'ISAD123!', 'user');
-	('Tim Berners-Lee', '@plymouth.ac.uk', 'COMP2001!', 'user');
-	('Ada Lovelace', '@plymouth.ac.uk', 'insecurePassword', 'admin');
+	('Grace Hopper', 'grace@plymouth.ac.uk', 'ISAD123!', 'user'),
+	('Tim Berners-Lee', 'tim@plymouth.ac.uk', 'COMP2001!', 'user'),
+	('Veraint', 'Veraint@plymouth.ac.uk', 'COMP2001!', 'admin'),
+	('Patryk', 'pat@plymouth.ac.uk', 'patpassword!', 'admin'),
+	('Ada Lovelace', '@plymouth.ac.uk', 'insecurePassword', 'user');
+
+
+EXEC CW1.[Follow_User] 1,2
+EXEC CW1.[Follow_User] 4,5
+EXEC CW1.[Follow_User] 5,4
+EXEC CW1.[Follow_User] 2,1
+EXEC CW1.[Follow_User] 3,1
+
+
+
+
+
+
+DBCC CHECKIDENT ("CW1.[User]", RESEED, 0);
+
+DELETE FROM CW1.[Follow_List]
+
+DELETE FROM CW1.[Archive_Follow_List]
+
+DELETE FROM CW1.[User]
+
+DELETE FROM CW1.[Archive_User]
