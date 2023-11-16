@@ -1,0 +1,7 @@
+Inserting Data
+
+INSERT INTO CW1.[User] ([username],[email],[password],[account_type])
+VALUES
+	('Grace Hopper', 'grace@plymouth.ac.uk', 'ISAD123!', 'user');
+	('Tim Berners-Lee', '@plymouth.ac.uk', 'COMP2001!', 'user');
+	('Ada Lovelace', '@plymouth.ac.uk', 'insecurePassword', 'admin');

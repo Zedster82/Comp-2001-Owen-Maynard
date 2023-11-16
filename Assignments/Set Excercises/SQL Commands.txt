@@ -5,8 +5,7 @@ CREATE SCHEMA CW1
 
 CREATE TABLE CW1.[User] (
     user_id INTEGER PRIMARY KEY IDENTITY(1,1),
-    first_name VARCHAR(40),
-    surname VARCHAR(40),
+    username VARCHAR(50),
     location VARCHAR(40),
     about_me VARCHAR(500),
     email VARCHAR(80),
@@ -17,17 +16,25 @@ CREATE TABLE CW1.[User] (
     birthday DATE,
     language VARCHAR(30),
     password VARCHAR(40),
-    account_type VARCHAR(15),
-    is_archive BIT
+    account_type VARCHAR(15)
+);
+
+CREATE TABLE CW1.[User] (
+    user_id INTEGER PRIMARY KEY IDENTITY(1,1),
+    username VARCHAR(50),
+    email VARCHAR(80),
+    password VARCHAR(40),
+    account_type VARCHAR(15)
 );
 
 
 
 CREATE TABLE CW1.[Favourite_Activities] (
-	FOREIGN KEY (activity_id) REFERENCES CW1.Activity(activity_id),
-	FOREIGN KEY (user_id) REFERENCES CW1.User(user_id)
+    activity_id INTEGER,
+    user_id INTEGER,
+	FOREIGN KEY (activity_id) REFERENCES CW1.[Activity](activity_id),
+	FOREIGN KEY (user_id) REFERENCES CW1.[User](user_id)
 );
-
 
 
 CREATE TABLE CW1.[Activity] (
@@ -37,31 +44,37 @@ CREATE TABLE CW1.[Activity] (
 
 
 CREATE TABLE CW1.[Follow_List] (
-	FOREIGN KEY (user_id) REFERENCES CW1.User(user_id),
-	follow_id INTEGER
+	user_id INTEGER,
+	FOREIGN KEY (user_id) REFERENCES CW1.[User](user_id),
+	follow_id INTEGER,
+	FOREIGN KEY (follow_id) REFERENCES CW1.[User](user_id),
+);
+
+
+CREATE TABLE CW1.[Archive_User] (
+    user_id INTEGER PRIMARY KEY IDENTITY(1,1),
+    username VARCHAR(50),
+    email VARCHAR(80),
+    password VARCHAR(40),
+    account_type VARCHAR(15)
+);
+	
+
+CREATE TABLE CW1.[Archive_Favourite_Activities] (
+    activity_id INTEGER,
+    user_id INTEGER,
+	FOREIGN KEY (activity_id) REFERENCES CW1.[Activity](activity_id),
+	FOREIGN KEY (user_id) REFERENCES CW1.[User](user_id)
+);
 
 
 
 
 
 
-ALTER TABLE CW1.[Archived_User]
-ADD CONSTRAINT user_id FOREIGN KEY([user_id]) 
-    REFERENCES CW1.[User]([user_id])
 
 
 
-INSERT INTO [User] (
-	[user_id],
-	[firstname],
-	[secondname],
-	[email],
-	[password]
-)
-VALUES
-	(1, 'Grace', 'Hopper', 'grace@plymouth.ac.uk', 'ISAD123!'),
-	(2, 'Tim', 'Berners-Lee', 'tim@plymouth.ac.uk', 'COMP2001!'),
-	(3, 'Ada', 'Lovelace', 'ada@plymouth.ac.uk', 'insecurePassword');
 
 
 

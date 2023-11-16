@@ -1,0 +1,81 @@
+CREATE PROCEDURE CW1.[Add_User]
+@username,
+@email,
+@password,
+@account_type
+BEGIN 
+
+INSERT INTO CW1.[User] (username,email,password,account_type)
+VALUES
+	(@username, @email, @password, @account_type);
+END
+
+
+EXEC Add_User 
+
+
+
+
+
+
+CREATE PROCEDURE CW1.[Archive_User]
+@id INTEGER 
+AS 
+	//Copy username to archive
+	//Copy email to archive
+	//Copy password to archive
+		
+	//Delete username from user
+	//Delete email from user
+	//Delete password from user
+
+BEGIN
+
+END
+
+
+
+CREATE PROCEDURE CW1.[Un_Archive_User]
+@id INTEGER
+AS 
+	//Copy username to main user table
+	//Copy email to main user table
+	//Copy password to main user table
+
+	//Archive all activity follows
+	//Archive all follow records
+		
+	//Delete username from archive user
+	//Delete email from archive user
+	//Delete password from archive user
+
+
+
+
+
+CREATE PROCEDURE CW1.[Follow_User]
+@user_id INTEGER
+@folow_id INTEGER
+AS	
+	//Add data to follow table that has the user_id and the follow_id
+GO
+
+
+CREATE PROCEDURE CW1.[Unfollow_User]
+@user_id INTEGER
+@follow_id
+AS
+	//Select all elements where user_id and follow_id are the @ versions and delete them
+GO
+
+
+CREATE PROCEDURE CW1.[Favourite_Activity]
+@activity_id
+@user_id
+AS
+	//Create data in favourite activities where activity_id and user_id are inputted
+GO
+
+
+CREATE PROCEDURE CW1.[Un_Favourite_Activity]
+@activity_id
