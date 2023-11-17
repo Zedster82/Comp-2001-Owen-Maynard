@@ -1,0 +1,17 @@
+Data Triggers
+
+
+
+
+
+CREATE TRIGGER CW1.[Email_Trigger]
+ON CW1.[User]
+FOR INSERT, UPDATE
+AS
+DECLARE @email VARCHAR(80)
+SELECT email FROM INSERTED
+WHERE NOT inserted.email LIKE '%@%.%' 
+BEGIN
+	RAISERROR ('Email is invalid', 16, 1);
+	ROLLBACK TRANSACTION;
+END
