@@ -1,9 +1,6 @@
 Data Triggers
 
 
-
-
-
 CREATE TRIGGER CW1.[Email_Trigger]
 ON CW1.[User]
 FOR INSERT, UPDATE

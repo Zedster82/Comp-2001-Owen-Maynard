@@ -6,7 +6,8 @@ VALUES
 	('Tim Berners-Lee', 'tim@plymouth.ac.uk', 'COMP2001!', 'user'),
 	('Veraint', 'Veraint@plymouth.ac.uk', 'COMP2001!', 'admin'),
 	('Patryk', 'pat@plymouth.ac.uk', 'patpassword!', 'admin'),
-	('Ada Lovelace', '@plymouth.ac.uk', 'insecurePassword', 'user');
+	('Ada Lovelace', '@plymouth.ac.uk', 'insecurePassword', 'user'),
+	('George', 'George@students.plymouth.ac.uk', 'Georges password', 'admin');
 
 
 EXEC CW1.[Follow_User] 1,2
@@ -14,6 +15,12 @@ EXEC CW1.[Follow_User] 4,5
 EXEC CW1.[Follow_User] 5,4
 EXEC CW1.[Follow_User] 2,1
 EXEC CW1.[Follow_User] 3,1
+EXEC CW1.[Follow_User] 1,6
+EXEC CW1.[Follow_User] 2,6
+EXEC CW1.[Follow_User] 3,6
+EXEC CW1.[Follow_User] 4,6
+EXEC CW1.[Follow_User] 6,3
+
 
 
 EXEC CW1.[Favourite_Activity] 1,1
@@ -24,10 +31,19 @@ EXEC CW1.[Favourite_Activity] 3,4
 EXEC CW1.[Favourite_Activity] 3,1
 EXEC CW1.[Favourite_Activity] 4,1
 EXEC CW1.[Favourite_Activity] 4,5
+EXEC CW1.[Favourite_Activity] 1,6
+EXEC CW1.[Favourite_Activity] 2,6
+EXEC CW1.[Favourite_Activity] 5,6
 
 EXEC CW1.[Archive_User_Procedure] 1
 EXEC CW1.[Archive_User_Procedure] 2
 
+
+EXEC CW1.[Add_Activity] "Running"
+EXEC CW1.[Add_Activity] "Walking"
+EXEC CW1.[Add_Activity] "Cycling"
+EXEC CW1.[Add_Activity] "Swimming"
+EXEC CW1.[Add_Activity] "Hiking"
 
 
 
