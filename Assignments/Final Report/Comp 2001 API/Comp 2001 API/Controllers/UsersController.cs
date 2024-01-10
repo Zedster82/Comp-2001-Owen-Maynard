@@ -30,6 +30,41 @@ namespace Comp_2001_API.Controllers
         [HttpGet]
         public string Get()
         {
+
+            //Get a list of all users
+            
+
+            string connectionString = Configuration.GetConnectionString("Default");
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string sql = "SELECT * FROM CW1.[User]";
+
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    
+                    try
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            //Read all data, using a data table to convert it
+                            var dataTable = new System.Data.DataTable();
+                            dataTable.Load(reader);
+
+                            string jsonConverted = JsonConvert.SerializeObject(dataTable);
+                            return jsonConverted;
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        return ex.Message;
+                    }
+                }
+            }
         }
 
         // GET api/Users/5
