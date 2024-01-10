@@ -3,12 +3,14 @@ Data Triggers
 
 CREATE TRIGGER CW1.[Email_Trigger]
 ON CW1.[User]
-FOR INSERT, UPDATE
+AFTER INSERT
 AS
-DECLARE @email VARCHAR(80)
-SELECT email FROM INSERTED
-WHERE NOT inserted.email LIKE '%@%.%' 
 BEGIN
-	RAISERROR ('Email is invalid', 16, 1);
-	ROLLBACK TRANSACTION;
-END
+    SET NOCOUNT ON;
+
+    IF EXISTS (SELECT 1 FROM INSERTED WHERE CHARINDEX('@', email) = 0)
+    BEGIN
+        RAISERROR('Email is invalid', 16, 1);
+        ROLLBACK;
+    END
+END;
