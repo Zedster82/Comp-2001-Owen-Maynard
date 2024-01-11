@@ -18,14 +18,12 @@ namespace Comp_2001_API.Controllers
 
 
 
-        // GET api/Login/5
+        // GET api/Login/username,password
         [HttpGet("{email},{password}")]
-        public string Get(string email,string password)
+        public Task<string> Get(string email,string password)
         {
-            return $"{email} {password}";
 
-
-
+            return Login.LoginAuth(email, password);
 
         }
 
