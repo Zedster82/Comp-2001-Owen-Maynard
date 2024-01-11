@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Comp 2001 API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dbc1f3aaebe2094c9638e6a40dccb2a908170bc0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3b0dfed32530ab58fb0c3add3bb6617de17ac50c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Comp 2001 API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Comp 2001 API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
