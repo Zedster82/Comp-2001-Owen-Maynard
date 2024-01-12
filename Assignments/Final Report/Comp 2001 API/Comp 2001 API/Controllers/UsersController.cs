@@ -25,18 +25,22 @@ namespace Comp_2001_API.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public string Get()
+        public ContentResult Get()
         {
+            //Check if a user is logged in
+            if (!Login.isLoggedIn)
+            {
+                return Content("You are not logged in");
+            }
+
 
             //Get a list of all users
-            
-
             string connectionString = Configuration.GetConnectionString("Default");
 
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                connection.Open();
+                connection.Open();  
 
                 string sql = "SELECT * FROM CW2.[User]";
 
@@ -53,13 +57,12 @@ namespace Comp_2001_API.Controllers
                             dataTable.Load(reader);
 
                             string jsonConverted = JsonConvert.SerializeObject(dataTable);
-                            connection.Close();
-                            return jsonConverted;
+                            return Content(jsonConverted, "application/json");
                         }
                     }
                     catch(Exception ex)
                     {
-                        return ex.Message;
+                        return Content(ex.Message, "application/json");
                     }
                 }
             }
@@ -69,10 +72,14 @@ namespace Comp_2001_API.Controllers
 
         // GET api/Users/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ContentResult Get(int id)
         {
+            //Check if a user is logged in
+            if (!Login.isLoggedIn)
+            {
+                return Content("You are not logged in");
+            }
             //Get a singular users data
-
             string connectionString = Configuration.GetConnectionString("Default");
 
 
@@ -96,12 +103,12 @@ namespace Comp_2001_API.Controllers
 
                             string jsonConverted = JsonConvert.SerializeObject(dataTable);
                             connection.Close();
-                            return jsonConverted;
+                            return Content(jsonConverted, "application/json");
                         }
                     }
                     catch (Exception ex)
                     {
-                        return ex.Message;
+                        return Content(ex.Message, "application/json");
                     }
                 }
             }
@@ -144,10 +151,60 @@ namespace Comp_2001_API.Controllers
         }
 
         // PUT api/Users/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{id},{username},{email},{password},{isAdmin}")]
+        public string Put(int id, string username, string email, string password, bool isAdmin)
         {
             //Edit a current users data
+
+            string usertype = "user";
+            if (isAdmin)
+            {
+                usertype = "admin";
+            }
+
+
+            string[] sqlArray = 
+           {$"EXEC CW2.[Edit_Username] {id}, \"{username}\"",
+            $"EXEC CW2.[Edit_Email] {id}, \"{email}\"",
+            $"EXEC CW2.[Edit_Password] {id}, \"{password}\"",
+            $"EXEC CW2.[Edit_Account_Type] {id}, \"{usertype}\""};
+
+
+            string connectionString = Configuration.GetConnectionString("Default");
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                foreach (string sql in sqlArray)
+                {
+                    
+
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+
+                        try
+                        {
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+
+
+                                
+                                
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            return ex.ToString();
+                        }
+                    }
+                }
+                connection.Close();
+                
+            }
+            return "User succesfully edited";
+
         }
 
         // DELETE api/Users/5
