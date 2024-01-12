@@ -1108,19 +1108,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {}
+    "C:\\Users\\Owenh\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\Comp-2001\\Assignments\\Final Report\\Comp 2001 API\\Comp 2001 API\\Comp 2001 API.csproj",
+      "projectUniqueName": "C:\\Users\\Owenh\\Documents\\GitHub\\Comp-2001\\Assignments\\Final Report\\Comp 2001 API\\Comp 2001 API\\Comp 2001 API.csproj",
       "projectName": "Comp 2001 API",
-      "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\Comp-2001\\Assignments\\Final Report\\Comp 2001 API\\Comp 2001 API\\Comp 2001 API.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\Comp-2001\\Assignments\\Final Report\\Comp 2001 API\\Comp 2001 API\\obj\\",
+      "projectPath": "C:\\Users\\Owenh\\Documents\\GitHub\\Comp-2001\\Assignments\\Final Report\\Comp 2001 API\\Comp 2001 API\\Comp 2001 API.csproj",
+      "packagesPath": "C:\\Users\\Owenh\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Owenh\\Documents\\GitHub\\Comp-2001\\Assignments\\Final Report\\Comp 2001 API\\Comp 2001 API\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Owenh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1128,6 +1133,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

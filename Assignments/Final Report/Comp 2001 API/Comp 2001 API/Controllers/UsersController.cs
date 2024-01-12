@@ -118,6 +118,12 @@ namespace Comp_2001_API.Controllers
         [HttpPost("{username},{email},{password}")]
         public string Post(string username, string email, string password)
         {
+            //Check if a user is logged in
+            if (!Login.isLoggedIn)
+            {
+                return "You are not logged in";
+            }
+
             //Create a new user
             string connectionString = Configuration.GetConnectionString("Default");
 
@@ -154,10 +160,19 @@ namespace Comp_2001_API.Controllers
         [HttpPut("{id},{username},{email},{password},{isAdmin}")]
         public string Put(int id, string username, string email, string password, bool isAdmin)
         {
+            //Check if a user is logged in
+            if (!Login.isLoggedIn)
+            {
+                return "You are not logged in";
+            }
+
+
+
             //Edit a current users data
 
             string usertype = "user";
-            if (isAdmin)
+            //Check to make sure that the user is being edited to admin and that the currently logged in user is an admin.
+            if (isAdmin && (Login.accountType == "admin"))
             {
                 usertype = "admin";
             }
@@ -211,6 +226,11 @@ namespace Comp_2001_API.Controllers
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
+            //Check if a user is logged in
+            if (!Login.isLoggedIn && Login.accountType == "admin")
+            {
+                return "You are not logged in, or you do not have permissions.";
+            }
             //Delete a user
 
             string connectionString = Configuration.GetConnectionString("Default");
