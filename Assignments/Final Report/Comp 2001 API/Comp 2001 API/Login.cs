@@ -10,18 +10,18 @@ namespace Comp_2001_API
 
 
 
-        
 
+        public static string? username;
 
-        public string? email;
+        public static string? email;
 
-        public string? password;
+        public static string? password;
 
-        public bool isLoggedIn;
+        public static bool isLoggedIn = false;
 
-        public string? accountType;
+        public static string? accountType;
 
-        public int accountID;
+        public static int? accountID;
 
 
         public static  async Task<string> LoginAuth(string email, string password)
@@ -46,7 +46,12 @@ namespace Comp_2001_API
             var responseText = await response.Content.ReadAsStringAsync();
             Console.WriteLine(responseText);
 
-            
+
+            if (responseText.Contains("True"))
+            {
+                isLoggedIn = true;
+            }
+
 
             return responseText;
         }
