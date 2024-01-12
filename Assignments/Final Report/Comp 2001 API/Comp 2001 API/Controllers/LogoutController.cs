@@ -13,7 +13,14 @@ namespace Comp_2001_API.Controllers
         [HttpGet]
         public string Get()
         {
-            return "Succefully logged out";
+            //Clear all data from logged in user
+            Login.isLoggedIn = false;
+            Login.username = string.Empty;
+            Login.password = string.Empty;
+            Login.email = string.Empty;
+            Login.accountType = string.Empty;
+            Login.accountID = null;
+            return "Successfully logged out";
         }
 
         
