@@ -115,7 +115,7 @@ namespace Comp_2001_API.Controllers
         }
 
         // POST api/Users/username,email,password
-        [HttpPost("{username},{email},{password}")]
+        [HttpPost("CreateUser/{username},{email},{password}")]
         public string Post(string username, string email, string password)
         {
             //Check if a user is logged in
@@ -157,8 +157,8 @@ namespace Comp_2001_API.Controllers
         }
 
         // PUT api/Users/5
-        [HttpPut("{id},{username},{email},{password},{isAdmin}")]
-        public string Put(int id, string username, string email, string password, bool isAdmin)
+        [HttpPut("EditUser/{id},{newUsername},{newEmail},{newPassword},{newAccountType}")]
+        public string Put(int id, string newUsername, string newEmail, string newPassword, bool newAccountType)
         {
             //Check if a user is logged in
             if (!Login.isLoggedIn)
@@ -170,19 +170,19 @@ namespace Comp_2001_API.Controllers
 
             //Edit a current users data
 
-            string usertype = "user";
+            string accountTypeString = "user";
             //Check to make sure that the user is being edited to admin and that the currently logged in user is an admin.
-            if (isAdmin && (Login.accountType == "admin"))
+            if (newAccountType && (Login.accountType == "admin"))
             {
-                usertype = "admin";
+                accountTypeString = "admin";
             }
 
 
             string[] sqlArray = 
-           {$"EXEC CW2.[Edit_Username] {id}, \"{username}\"",
-            $"EXEC CW2.[Edit_Email] {id}, \"{email}\"",
-            $"EXEC CW2.[Edit_Password] {id}, \"{password}\"",
-            $"EXEC CW2.[Edit_Account_Type] {id}, \"{usertype}\""};
+           {$"EXEC CW2.[Edit_Username] {id}, \"{newUsername}\"",
+            $"EXEC CW2.[Edit_Email] {id}, \"{newEmail}\"",
+            $"EXEC CW2.[Edit_Password] {id}, \"{newPassword}\"",
+            $"EXEC CW2.[Edit_Account_Type] {id}, \"{accountTypeString}\""};
 
 
             string connectionString = Configuration.GetConnectionString("Default");
@@ -223,7 +223,7 @@ namespace Comp_2001_API.Controllers
         }
 
         // DELETE api/Users/5
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteUser/{id}")]
         public string Delete(int id)
         {
             //Check if a user is logged in

@@ -1,0 +1,84 @@
+CREATE PROCEDURE CW2.[Followers_Count]
+@user_id INTEGER
+AS
+BEGIN
+
+SELECT COUNT(*)
+FROM CW2.[Follow_List]
+WHERE follow_id=@user_id;
+
+END
+
+EXEC CW2.[Followers_Count] 1
+
+
+
+
+CREATE PROCEDURE CW2.[Following_Count]
+@user_id INTEGER
+AS
+BEGIN
+
+SELECT COUNT(*)
+FROM CW2.[Follow_List]
+WHERE user_id=@user_id;
+
+END
+
+EXEC CW2.[Following_Count] 1
+
+
+
+
+
+CREATE PROCEDURE CW2.[Favourite_Activity_List_ID]
+@user_id INTEGER
+AS
+BEGIN
+
+SELECT FA.user_id, STRING_AGG(A.activity_type, ', ') AS favorite_activities
+FROM CW2.[Activity] A
+JOIN CW2.[Favourite_Activities] FA ON A.activity_id = FA.activity_id
+WHERE FA.user_id = @user_id
+GROUP BY FA.user_id;
+
+END
+
+EXEC CW2.[Favourite_Activity_List_ID] 1
+
+
+
+
+
+CREATE PROCEDURE CW2.[Favourite_Activity_List_All]
+AS
+BEGIN
+
+SELECT FA.user_id, STRING_AGG(A.activity_type, ', ') AS favorite_activities
+FROM CW2.[Activity] A
+JOIN CW2.[Favourite_Activities] FA ON A.activity_id = FA.activity_id
+GROUP BY FA.user_id;
+
+END
+
+
+EXEC CW2.[Favourite_Activity_List_All]
+
+
+
+
+
+CREATE PROCEDURE CW2.[Activity_Edit]
+@activity_id INTEGER,
+@new_activity_type STRING
+AS
+BEGIN
+
+UPDATE CW2.[Activity]
+SET activity_type = @new_activity_type
+WHERE activity_id = @activity_id;
+
+END
+
+
+EXEC CW2.[Activity_Edit] 1, 'Speed Walking"

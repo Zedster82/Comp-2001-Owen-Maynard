@@ -17,7 +17,7 @@ namespace Comp_2001_API
 
         public static string? password;
 
-        public static bool isLoggedIn = false;
+        public static bool isLoggedIn = true;
 
         public static string? accountType;
 

@@ -56,7 +56,7 @@ namespace Comp_2001_API.Controllers
                             var dataTable = new System.Data.DataTable();
                             dataTable.Load(reader);
 
-                            string jsonConverted = JsonConvert.SerializeObject(dataTable);
+                            //string jsonConverted = JsonConvert.SerializeObject(dataTable);
                             
                             Login.accountID = Convert.ToInt32(dataTable.Rows[0]["user_id"].ToString());
                             Login.username = dataTable.Rows[0]["username"].ToString();
