@@ -16,7 +16,6 @@ namespace Comp_2001_API.Controllers
             //Clear all data from logged in user
             Login.isLoggedIn = false;
             Login.username = string.Empty;
-            Login.password = string.Empty;
             Login.email = string.Empty;
             Login.accountType = string.Empty;
             Login.accountID = null;

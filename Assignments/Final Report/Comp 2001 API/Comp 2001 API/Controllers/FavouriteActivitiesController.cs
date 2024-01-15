@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Configuration;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,12 +10,12 @@ namespace Comp_2001_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ActivitiesController : ControllerBase
+    public class FavouriteActivitiesController : ControllerBase
     {
 
         public IConfiguration Configuration { get; }
 
-        public ActivitiesController(IConfiguration configuration)
+        public FavouriteActivitiesController(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -21,234 +23,11 @@ namespace Comp_2001_API.Controllers
 
 
 
-
-
-        // GET: api/<ActivitiesController>
+        // GET: api/<FavouriteActivitiesController>
         [HttpGet]
         public ContentResult Get()
         {
-            //Get all Activities
-            //Check if a user is logged in
-            if (!Login.isLoggedIn)
-            {
-                return Content("You are not logged in");
-            }
-
-
-            //Check if login is expired
-            if (Login.loginExpired())
-            {
-                return Content("Login Expired");
-            }
-
-
-            //Get a list of all users
-            string connectionString = Configuration.GetConnectionString("Default");
-
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                string sql = "SELECT * FROM CW2.[Activity]";
-
-
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-
-                    try
-                    {
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            //Read all data, using a data table to convert it
-                            var dataTable = new System.Data.DataTable();
-                            dataTable.Load(reader);
-
-                            string jsonConverted = JsonConvert.SerializeObject(dataTable);
-                            return Content(jsonConverted, "application/json");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        return Content(ex.Message, "application/json");
-                    }
-                }
-            }
-        }
-
-        // GET api/<ActivitiesController>/5
-        [HttpGet("{id}")]
-        public ContentResult Get(int id)
-        {
-            //Get Activity at value
-            //Check if a user is logged in
-            if (!Login.isLoggedIn)
-            {
-                return Content("You are not logged in");
-            }
-
-
-            //Check if login is expired
-            if (Login.loginExpired())
-            {
-                return Content("Login Expired");
-            }
-
-
-            //Get a list of all users
-            string connectionString = Configuration.GetConnectionString("Default");
-
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                string sql = $"SELECT * FROM CW2.[Activity] WHERE activity_id = @id";
-
-
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@id", id);
-                    try
-                    {
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            //Read all data, using a data table to convert it
-                            var dataTable = new System.Data.DataTable();
-                            dataTable.Load(reader);
-
-                            string jsonConverted = JsonConvert.SerializeObject(dataTable);
-                            return Content(jsonConverted, "application/json");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        return Content(ex.Message, "application/json");
-                    }
-                }
-            }
-        }
-
-        // POST api/<ActivitiesController>
-        [HttpPost("CreateActivity")]
-        public ContentResult Post(string activityName)
-        {
-            
-            //Create activity
-            //Check if a user is logged in
-            if (!Login.isLoggedIn)
-            {
-                return Content("You are not logged in");
-            }
-
-            //Check if login is expired
-            if (Login.loginExpired())
-            {
-                return Content("Login Expired");
-            }
-
-            //Check if user is an admin
-            if (Login.accountType != "admin")
-            {
-                return Content("You do not have permission to perfom this action");
-            }
-
-            string connectionString = Configuration.GetConnectionString("Default");
-
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                string sql = "EXEC CW2.[Add_Activity] @activityName";
-
-
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@activityName", activityName);
-                    try
-                    {
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            //Read all data, using a data table to convert it
-                            var dataTable = new System.Data.DataTable();
-                            dataTable.Load(reader);
-
-                            string jsonConverted = JsonConvert.SerializeObject(dataTable);
-                            return Content(jsonConverted, "application/json");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        return Content(ex.Message, "application/json");
-                    }
-                }
-            }
-        }
-
-        // PUT api/<ActivitiesController>/5
-        [HttpPut("{id},{newActivityName}")]
-        public ContentResult Put(int id, string newActivityName)
-        {
-            //Edit Activity
-            //Check if a user is logged in
-            if (!Login.isLoggedIn)
-            {
-                return Content("You are not logged in");
-            }
-
-            //Check if login is expired
-            if (Login.loginExpired())
-            {
-                return Content("Login Expired");
-            }
-
-            //Check if user is an admin
-            if (Login.accountType != "admin")
-            {
-                return Content("You do not have permission to perfom this action");
-            }
-
-            string connectionString = Configuration.GetConnectionString("Default");
-
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                string sql = "EXEC CW2.[Activity_Edit] @id, @activityName";
-
-
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@activityName", newActivityName);
-                    command.Parameters.AddWithValue("@id", id);
-                    try
-                    {
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            //Read all data, using a data table to convert it
-                            var dataTable = new System.Data.DataTable();
-                            dataTable.Load(reader);
-
-                            string jsonConverted = JsonConvert.SerializeObject(dataTable);
-                            return Content(jsonConverted, "application/json");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        return Content(ex.Message, "application/json");
-                    }
-                }
-            }
-        }
-
-        // DELETE api/<ActivitiesController>/5
-        [HttpDelete("{id}")]
-        public ContentResult Delete(int id)
-        {
-            //Delete Activity
-            
+            //Get a list of a single user favourite activities
             //Check if a user is logged in
             if (!Login.isLoggedIn)
             {
@@ -267,6 +46,7 @@ namespace Comp_2001_API.Controllers
                 return Content("You do not have permission to perfom this action");
             }
 
+            //Get a list of all users favourite activities
             string connectionString = Configuration.GetConnectionString("Default");
 
 
@@ -274,7 +54,58 @@ namespace Comp_2001_API.Controllers
             {
                 connection.Open();
 
-                string sql = "EXEC CW2.[Delete_Activity] @id";
+                string sql = "EXEC CW2.[Favourite_Activity_List_All]";
+
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+
+                    try
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            //Read all data, using a data table to convert it
+                            var dataTable = new System.Data.DataTable();
+                            dataTable.Load(reader);
+
+                            string jsonConverted = JsonConvert.SerializeObject(dataTable);
+                            return Content(jsonConverted, "application/json");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return Content(ex.Message, "application/json");
+                    }
+                }
+            }
+        }
+
+        // GET api/<FavouriteActivitiesController>/5
+        [HttpGet("{id}")]
+        public ContentResult Get(int id)
+        {
+            //Check if a user is logged in
+            if (!Login.isLoggedIn)
+            {
+                return Content("You are not logged in");
+            }
+
+
+            //Check if login is expired
+            if (Login.loginExpired())
+            {
+                return Content("Login Expired");
+            }
+
+            //Get a list of a specific users favourite activities
+            string connectionString = Configuration.GetConnectionString("Default");
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string sql = "EXEC CW2.[Favourite_Activity_List_ID] @id";
 
 
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -284,7 +115,12 @@ namespace Comp_2001_API.Controllers
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            
+                            //Read all data, using a data table to convert it
+                            var dataTable = new System.Data.DataTable();
+                            dataTable.Load(reader);
+
+                            string jsonConverted = JsonConvert.SerializeObject(dataTable);
+                            return Content(jsonConverted, "application/json");
                         }
                     }
                     catch (Exception ex)
@@ -293,7 +129,115 @@ namespace Comp_2001_API.Controllers
                     }
                 }
             }
-            return Content("Succesful deletion");
+        }
+
+        // POST api/<FavouriteActivitiesController>
+        [HttpPost("Favourite_Activity")]
+        public ContentResult Post(int activity_id)
+        {
+            //Favourite an activity
+            //Check if a user is logged in
+            if (!Login.isLoggedIn)
+            {
+                return Content("You are not logged in");
+            }
+
+            //Check if login is expired
+            if (Login.loginExpired())
+            {
+                return Content("Login Expired");
+            }
+
+
+            //Get a list of a specific users favourite activities
+            string connectionString = Configuration.GetConnectionString("Default");
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string sql = "EXEC CW2.[Favourite_Activity] @user_id, @activity_id";
+
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@user_id", Login.accountID);
+                    command.Parameters.AddWithValue("@activity_id", activity_id);
+                    try
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            //Read all data, using a data table to convert it
+                            var dataTable = new System.Data.DataTable();
+                            dataTable.Load(reader);
+
+                            string jsonConverted = JsonConvert.SerializeObject(dataTable);
+                            return Content(jsonConverted, "application/json");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return Content(ex.Message, "application/json");
+                    }
+                }
+            }
+        }
+
+        
+
+        // DELETE api/<FavouriteActivitiesController>/5
+        [HttpDelete("Un_Favourite_Activity{id}")]
+        public ContentResult Delete(int activity_id)
+        {
+            //Unfavourite an activity
+
+            //Check if a user is logged in
+            if (!Login.isLoggedIn)
+            {
+                return Content("You are not logged in");
+            }
+
+            //Check if login is expired
+            if (Login.loginExpired())
+            {
+                return Content("Login Expired");
+            }
+
+
+            //Get a list of a specific users favourite activities
+            string connectionString = Configuration.GetConnectionString("Default");
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string sql = "EXEC CW2.[Un_Favourite_Activity] @user_id, @activity_id";
+
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@user_id", Login.accountID);
+                    command.Parameters.AddWithValue("@activity_id", activity_id);
+                    try
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            //Read all data, using a data table to convert it
+                            var dataTable = new System.Data.DataTable();
+                            dataTable.Load(reader);
+
+                            string jsonConverted = JsonConvert.SerializeObject(dataTable);
+                            return Content(jsonConverted, "application/json");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return Content(ex.Message, "application/json");
+                    }
+                }
+            }
         }
     }
 }

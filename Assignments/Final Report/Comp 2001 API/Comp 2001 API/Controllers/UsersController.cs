@@ -32,6 +32,12 @@ namespace Comp_2001_API.Controllers
             {
                 return Content("You are not logged in");
             }
+            //Check if login is expired
+            if (Login.loginExpired()) 
+            {
+                return Content("Login Expired");
+            }
+
 
 
             //Get a list of all users
@@ -42,7 +48,7 @@ namespace Comp_2001_API.Controllers
             {
                 connection.Open();  
 
-                string sql = "SELECT * FROM CW2.[User]";
+                string sql = "SELECT * FROM CW2.[Main_View]";
 
 
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -79,6 +85,14 @@ namespace Comp_2001_API.Controllers
             {
                 return Content("You are not logged in");
             }
+
+            //Check if login is expired
+            if (Login.loginExpired())
+            {
+                return Content("Login Expired");
+            }
+
+
             //Get a singular users data
             string connectionString = Configuration.GetConnectionString("Default");
 
@@ -87,7 +101,7 @@ namespace Comp_2001_API.Controllers
             {
                 connection.Open();
 
-                string sql = $"SELECT * FROM CW2.[User] WHERE user_id='{id}'";
+                string sql = $"SELECT * FROM CW2.[Main_View] WHERE [User ID]='{id}'";
 
 
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -116,28 +130,45 @@ namespace Comp_2001_API.Controllers
 
         // POST api/Users/username,email,password
         [HttpPost("CreateUser/{username},{email},{password}")]
-        public string Post(string username, string email, string password)
+        public ContentResult Post(string username, string email, string password)
         {
             //Check if a user is logged in
             if (!Login.isLoggedIn)
             {
-                return "You are not logged in";
+                return Content("You are not logged in");
             }
 
-            //Create a new user
+
+            //Check if login is expired
+            if (Login.loginExpired())
+            {
+                return Content("Login Expired");
+            }
+
+
+
+
+            //Hash the password
+
+            string[] hashresult = Login.hashPassword(password);
+
+            
             string connectionString = Configuration.GetConnectionString("Default");
 
-
+            //Create a new user
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                string sql = $"EXEC CW2.[Add_User] '{username}', '{email}', '{password}', 'user'";
+                string sql = "EXEC CW2.[Add_User] @Username, @Email, @Hashed_password, @Salt, 'user'";
 
 
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-
+                    command.Parameters.AddWithValue("@Username", username);
+                    command.Parameters.AddWithValue("@Email", email);
+                    command.Parameters.AddWithValue("@Hashed_password", hashresult[0]);
+                    command.Parameters.AddWithValue("@Salt", hashresult[1]);
                     try
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
@@ -145,12 +176,12 @@ namespace Comp_2001_API.Controllers
                             
                             
                             connection.Close();
-                            return $"user {username} with email {email} added";
+                            return Content($"user {username} with email {email} added");
                         }
                     }
                     catch (Exception ex)
                     {
-                        return "User creation failed, try again";
+                        return Content("User creation failed, try again");
                     }
                 }
             }
@@ -167,6 +198,12 @@ namespace Comp_2001_API.Controllers
             }
 
 
+            //Check if login is expired
+            if (Login.loginExpired())
+            {
+                return "Login Expired";
+            }
+
 
             //Edit a current users data
 
@@ -176,12 +213,23 @@ namespace Comp_2001_API.Controllers
             {
                 accountTypeString = "admin";
             }
+            else
+            {
+                return "You do not have permission to do this";
+            }
+
+
+
+            //Generate the new hashed password
+            string[] hashresult = Login.hashPassword(newPassword);
+
+
 
 
             string[] sqlArray = 
            {$"EXEC CW2.[Edit_Username] {id}, \"{newUsername}\"",
             $"EXEC CW2.[Edit_Email] {id}, \"{newEmail}\"",
-            $"EXEC CW2.[Edit_Password] {id}, \"{newPassword}\"",
+            $"EXEC CW2.[Edit_Password] {id}, \"{hashresult[0]}\" , '{hashresult[1]}'",
             $"EXEC CW2.[Edit_Account_Type] {id}, \"{accountTypeString}\""};
 
 
@@ -227,12 +275,25 @@ namespace Comp_2001_API.Controllers
         public string Delete(int id)
         {
             //Check if a user is logged in
-            if (!Login.isLoggedIn && Login.accountType == "admin")
+            if (!Login.isLoggedIn)
             {
-                return "You are not logged in, or you do not have permissions.";
+                return "You are not logged in";
             }
-            //Delete a user
 
+            //Check if login is expired
+            if (Login.loginExpired())
+            {
+                return "Login Expired";
+            }
+
+            //Check if the user is an admin
+            if (Login.accountType != "admin")
+            {
+                return "You do not have permission to perfom this action";
+            }
+
+
+            //Delete a user
             string connectionString = Configuration.GetConnectionString("Default");
 
 
@@ -240,12 +301,12 @@ namespace Comp_2001_API.Controllers
             {
                 connection.Open();
 
-                string sql = $"EXEC CW2.[Archive_User_Procedure] {id}";
+                string sql = $"EXEC CW2.[Archive_User_Procedure] @id";
 
 
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    
+                    command.Parameters.AddWithValue("@id", id);
                     try
                     {
                         using (SqlDataReader reader = command.ExecuteReader())

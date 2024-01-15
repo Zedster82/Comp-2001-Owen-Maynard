@@ -29,6 +29,12 @@ namespace Comp_2001_API.Controllers
             }
 
 
+            //Check if login is expired
+            if (Login.loginExpired())
+            {
+                return Content("Login Expired");
+            }
+
 
             //Get number of followers from currently logged in user
             string connectionString = Configuration.GetConnectionString("Default");
@@ -85,6 +91,13 @@ namespace Comp_2001_API.Controllers
             if (!Login.isLoggedIn)
             {
                 return Content("You are not logged in");
+            }
+
+
+            //Check if login is expired
+            if (Login.loginExpired())
+            {
+                return Content("Login Expired");
             }
 
 

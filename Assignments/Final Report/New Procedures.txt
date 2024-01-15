@@ -70,7 +70,7 @@ EXEC CW2.[Favourite_Activity_List_All]
 
 CREATE PROCEDURE CW2.[Activity_Edit]
 @activity_id INTEGER,
-@new_activity_type STRING
+@new_activity_type VARCHAR(30)
 AS
 BEGIN
 
@@ -82,3 +82,172 @@ END
 
 
 EXEC CW2.[Activity_Edit] 1, 'Speed Walking"
+
+
+
+
+
+
+
+CREATE PROCEDURE CW2.[Delete_Activity]
+@activity_id INTEGER
+AS 
+BEGIN
+
+DELETE FROM CW2.[Activity]
+WHERE activity_id = @activity_id;
+
+END
+
+EXEC CW2.[Delete_Activity] 6
+
+
+
+
+
+CREATE TABLE CW2.[User] (
+    user_id INTEGER PRIMARY KEY IDENTITY(1,1),
+    username VARCHAR(50),
+    email VARCHAR(80),
+    hashed_password VARCHAR(100),
+    salt VARCHAR(40),
+    account_type VARCHAR(15)
+);
+
+
+
+
+CREATE TABLE CW2.[Archive_User] (
+    user_id INTEGER PRIMARY KEY,
+    username VARCHAR(50),
+    email VARCHAR(80),
+    hashed_password VARCHAR(100),
+    salt VARCHAR(40),
+    account_type VARCHAR(15)
+);
+
+
+
+
+
+
+CREATE PROCEDURE CW2.[Edit_Password]
+@user_id INTEGER,
+@new_password VARCHAR(100),
+@salt VARCHAR(40)
+AS
+BEGIN
+UPDATE CW2.[User]
+SET hashed_password = @new_password,
+    salt = @salt
+WHERE user_id = @user_id;
+END
+
+EXEC CW1.[Edit_Password] 4, "Pats password", 'salt'
+
+
+
+
+
+
+
+
+
+
+CREATE PROCEDURE CW2.[Add_User]
+@username VARCHAR(50),
+@email VARCHAR(80),
+@hashed_password VARCHAR(100),
+@salt VARCHAR(40),
+@account_type VARCHAR(15)
+AS
+BEGIN 
+INSERT INTO CW2.[User] (username,email,hashed_password,salt,account_type)
+VALUES
+	(@username, @email, @hashed_password, @salt, @account_type);
+END
+
+
+
+EXEC CW2.[Add_User] 'Veraint', 'Veraint@students.plymouth.ac.uk', 'testpassword', 'salt', 'user'
+
+
+
+
+
+CREATE PROCEDURE CW2.[Archive_User_Procedure]
+@user_id INTEGER
+AS
+BEGIN
+INSERT INTO CW2.[Archive_User] (user_id, username, email, hashed_password, salt, account_type)
+SELECT *
+FROM CW2.[User]
+WHERE user_id = @user_id;
+
+INSERT INTO CW2.[Archive_Favourite_Activities] (activity_id, user_id)
+SELECT * 
+FROM CW2.[Favourite_Activities]
+WHERE user_id = @user_id;
+
+INSERT INTO CW2.[Archive_Follow_List] (user_id, follow_id)
+SELECT * 
+FROM CW2.[Follow_List]
+WHERE user_id = @user_id;
+
+INSERT INTO CW2.[Archive_Follow_List] (user_id, follow_id)
+SELECT * 
+FROM CW2.[Follow_List]
+WHERE follow_id = @user_id;
+
+DELETE FROM CW2.[Favourite_Activities]
+WHERE user_id = @user_id;
+
+DELETE FROM CW2.[Follow_List]
+WHERE user_id = @user_id;
+
+DELETE FROM CW2.[Follow_List]
+WHERE follow_id = @user_id;
+
+DELETE FROM CW2.[User]
+WHERE user_id = @user_id;
+END
+
+
+EXEC CW2.[Archive_User_Procedure] 2
+
+
+
+
+
+
+
+
+CREATE VIEW CW2.[Main_View] AS
+SELECT u.user_id AS "User ID", u.username AS "Username", u.email AS "Email", u.account_type AS "Account Type",
+(SELECT COUNT(*) FROM CW2.[Follow_List] f WHERE u.user_id = f.user_id) Following,
+(SELECT COUNT(*) FROM CW2.[Follow_List] f WHERE u.user_id = f.follow_id) Followers,
+STRING_AGG(a.activity_type,', ') AS "Favourite Activities"
+FROM CW2.[User] u
+LEFT JOIN CW2.[Favourite_Activities] f ON u.user_id = f.user_id
+LEFT JOIN CW2.[Activity] a ON f.activity_id = a.activity_id
+GROUP BY u.user_id, u.account_type, u.username, u.email
+
+SELECT * FROM CW2.[Main_View]
+
+
+
+
+
+
+CREATE PROCEDURE CW2.[Follow_User]
+@user_id INTEGER,
+@follow_id INTEGER
+AS
+BEGIN	
+
+INSERT INTO CW2.[Follow_List] (user_id, follow_id)
+VALUES
+	(@user_id, @follow_id);
+END
+
+EXEC CW2.[Follow_User] 1 , 2

@@ -2,7 +2,7 @@ SQL View
 
 
 CREATE VIEW CW1.[Main_View] AS
-SELECT u.username AS "Username", u.email AS "Email", u.account_type AS "Account Type",
+SELECT u.user_id AS "User ID", u.username AS "Username", u.email AS "Email", u.account_type AS "Account Type",
 (SELECT COUNT(*) FROM CW1.[Follow_List] f WHERE u.user_id = f.user_id) Following,
 (SELECT COUNT(*) FROM CW1.[Follow_List] f WHERE u.user_id = f.follow_id) Followers,
 STRING_AGG(a.activity_type,', ') AS "Favourite Activities"

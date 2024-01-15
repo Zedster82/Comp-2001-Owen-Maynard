@@ -34,6 +34,11 @@ namespace Comp_2001_API.Controllers
                 return Content("You are not logged in");
             }
 
+            //Check if login is expired
+            if (Login.loginExpired())
+            {
+                return Content("Login Expired");
+            }
 
             //Get a list of all archive users
             string connectionString = Configuration.GetConnectionString("Default");
@@ -78,6 +83,14 @@ namespace Comp_2001_API.Controllers
             {
                 return Content("You are not logged in");
             }
+
+            //Check if login is expired
+            if (Login.loginExpired())
+            {
+                return Content("Login Expired");
+            }
+
+
             //Get a singular users data
             string connectionString = Configuration.GetConnectionString("Default");
 

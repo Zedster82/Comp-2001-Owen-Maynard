@@ -20,17 +20,101 @@ namespace Comp_2001_API.Controllers
 
 
         // POST api/FollowController/5
-        [HttpPost]
-        public void Post(int followingID)
+        [HttpPost("Follow{id}")]
+        public ContentResult Post(int id)
         {
-            
+            //Check if a user is logged in
+            if (!Login.isLoggedIn)
+            {
+                return Content("You are not logged in");
+            }
+
+
+            //Check if login is expired
+            if (Login.loginExpired())
+            {
+                return Content("Login Expired");
+            }
+
+
+
+            string connectionString = Configuration.GetConnectionString("Default");
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string sql = "EXEC CW2.[Follow_User] @user_id , @following_id";
+
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@user_id", Login.accountID);
+                    command.Parameters.AddWithValue("@following_id", id);
+                    try
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            
+                            return Content($"User {Login.accountID} has successfully followed user {id}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return Content(ex.Message, "application/json");
+                    }
+                }
+            }
         }
 
         // DELETE api/<FollowController>/5
         [HttpDelete("Unfollow{id}")]
-        public void Delete(int id)
+        public ContentResult Delete(int id)
         {
-            
+            //Check if a user is logged in
+            if (!Login.isLoggedIn)
+            {
+                return Content("You are not logged in");
+            }
+
+
+            //Check if login is expired
+            if (Login.loginExpired())
+            {
+                return Content("Login Expired");
+            }
+
+
+
+            string connectionString = Configuration.GetConnectionString("Default");
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string sql = "EXEC CW2.[Unfollow_User] @user_id , @following_id";
+
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@user_id", Login.accountID);
+                    command.Parameters.AddWithValue("@following_id", id);
+                    try
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+
+                            return Content($"User {Login.accountID} has successfully un-followed user {id}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return Content(ex.Message, "application/json");
+                    }
+                }
+            }
         }
     }
 }

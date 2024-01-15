@@ -32,11 +32,12 @@ namespace Comp_2001_API.Controllers
                 return "Incorrect Login";
             }
 
+            
 
 
             string connectionString = Configuration.GetConnectionString("Default");
 
-
+            
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -56,16 +57,24 @@ namespace Comp_2001_API.Controllers
                             var dataTable = new System.Data.DataTable();
                             dataTable.Load(reader);
 
-                            //string jsonConverted = JsonConvert.SerializeObject(dataTable);
                             
+                            //Getting the rest of the user data from the server
                             Login.accountID = Convert.ToInt32(dataTable.Rows[0]["user_id"].ToString());
                             Login.username = dataTable.Rows[0]["username"].ToString();
                             Login.email = dataTable.Rows[0]["email"].ToString();
-                            Login.password = dataTable.Rows[0]["password"].ToString();
                             Login.accountType = dataTable.Rows[0]["account_type"].ToString();
 
 
-                            
+                            //Checking if password is the same as the database
+                            string hashedPassword = dataTable.Rows[0]["hashed_password"].ToString(); //Get hashed password
+                            string salt = dataTable.Rows[0]["salt"].ToString();//Get salt
+
+                            string[] hashResult = Login.hashPassword(password, salt);
+
+                            if (hashResult[0] != hashedPassword)//Check if the password is correct
+                            {
+                                return "Database password incorrect";
+                            }
 
                             return $"Successfully logged in as user: {Login.username} with email of: {Login.email}";
                             
@@ -78,14 +87,8 @@ namespace Comp_2001_API.Controllers
                     }
                 }
             }
-
-
-
-
-
-            return "failed";
-
         }
 
+        
     }
 }
