@@ -84,7 +84,7 @@ namespace Comp_2001_API.Controllers
 
 
         // GET api/<FollowCountController>/5
-        [HttpGet("Followers/{id}")]
+        [HttpGet("{id}")]
         public ContentResult Get(int id)
         {
             //Check if a user is logged in
