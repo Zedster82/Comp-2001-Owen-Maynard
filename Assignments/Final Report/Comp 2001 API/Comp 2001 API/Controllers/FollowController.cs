@@ -20,7 +20,7 @@ namespace Comp_2001_API.Controllers
 
 
         // POST api/FollowController/5
-        [HttpPost("Follow{id}")]
+        [HttpPost("Follow/{id}")]
         public ContentResult Post(int id)
         {
             //Check if a user is logged in
@@ -69,7 +69,7 @@ namespace Comp_2001_API.Controllers
         }
 
         // DELETE api/<FollowController>/5
-        [HttpDelete("Unfollow{id}")]
+        [HttpDelete("Unfollow/{id}")]
         public ContentResult Delete(int id)
         {
             //Check if a user is logged in

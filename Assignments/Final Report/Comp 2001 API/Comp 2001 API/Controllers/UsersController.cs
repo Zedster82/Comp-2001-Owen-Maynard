@@ -188,8 +188,8 @@ namespace Comp_2001_API.Controllers
         }
 
         // PUT api/Users/5
-        [HttpPut("EditUser/{id},{newUsername},{newEmail},{newPassword},{newAccountType}")]
-        public string Put(int id, string newUsername, string newEmail, string newPassword, bool newAccountType)
+        [HttpPut("EditUser/{newUsername},{newEmail},{newPassword},{newAccountType}")]
+        public string Put( string newUsername, string newEmail, string newPassword, bool newAccountType)
         {
             //Check if a user is logged in
             if (!Login.isLoggedIn)
@@ -222,6 +222,8 @@ namespace Comp_2001_API.Controllers
 
             //Generate the new hashed password
             string[] hashresult = Login.hashPassword(newPassword);
+
+            int id = (int) Login.accountID;
 
 
 

@@ -21,7 +21,7 @@ namespace Comp_2001_API.Controllers
 
 
 
-        [HttpGet("Logged In")]
+        /*[HttpGet("Logged In")]
         public ContentResult Get()
         {
             //Check if a user is logged in
@@ -83,7 +83,7 @@ namespace Comp_2001_API.Controllers
                     }
                 }
             }
-        }
+        }*/
 
         // GET api/<FollowingCountController>/5
         [HttpGet("{id}")]

@@ -19,7 +19,7 @@ namespace Comp_2001_API.Controllers
             Configuration = configuration;
         }
 
-        [HttpGet("Logged in")]
+        /*[HttpGet("Logged in")]
         public ContentResult Get()
         {
             //Check if a user is logged in
@@ -80,11 +80,11 @@ namespace Comp_2001_API.Controllers
                     }
                 }
             }
-        }
+        }*/
 
 
         // GET api/<FollowCountController>/5
-        [HttpGet("Followers{id}")]
+        [HttpGet("Followers/{id}")]
         public ContentResult Get(int id)
         {
             //Check if a user is logged in

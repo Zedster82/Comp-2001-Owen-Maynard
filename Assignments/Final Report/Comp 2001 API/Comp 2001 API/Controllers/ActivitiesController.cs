@@ -187,7 +187,7 @@ namespace Comp_2001_API.Controllers
         }
 
         // PUT api/<ActivitiesController>/5
-        [HttpPut("{id},{newActivityName}")]
+        [HttpPut("Edit_Activity/{id},{newActivityName}")]
         public ContentResult Put(int id, string newActivityName)
         {
             //Edit Activity
@@ -244,7 +244,7 @@ namespace Comp_2001_API.Controllers
         }
 
         // DELETE api/<ActivitiesController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete_Activity/{id}")]
         public ContentResult Delete(int id)
         {
             //Delete Activity

@@ -132,7 +132,7 @@ namespace Comp_2001_API.Controllers
         }
 
         // POST api/<FavouriteActivitiesController>
-        [HttpPost("Favourite_Activity")]
+        [HttpPost("Favourite_Activity/{activity_id}")]
         public ContentResult Post(int activity_id)
         {
             //Favourite an activity
@@ -187,7 +187,7 @@ namespace Comp_2001_API.Controllers
         
 
         // DELETE api/<FavouriteActivitiesController>/5
-        [HttpDelete("Un_Favourite_Activity{id}")]
+        [HttpDelete("Un_Favourite_Activity/{activity_id}")]
         public ContentResult Delete(int activity_id)
         {
             //Unfavourite an activity
