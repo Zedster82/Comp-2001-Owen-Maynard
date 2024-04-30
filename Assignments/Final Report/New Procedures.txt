@@ -149,11 +149,6 @@ EXEC CW1.[Edit_Password] 4, "Pats password", 'salt'
 
 
 
-
-
-
-
-
 CREATE PROCEDURE CW2.[Add_User]
 @username VARCHAR(50),
 @email VARCHAR(80),
@@ -170,7 +165,6 @@ END
 
 
 EXEC CW2.[Add_User] 'Veraint', 'Veraint@students.plymouth.ac.uk', 'testpassword', 'salt', 'user'
-
 
 
 
